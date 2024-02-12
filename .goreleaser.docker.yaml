@@ -1,0 +1,54 @@
+project_name: baton-alienvault
+builds:
+  - binary: baton-alienvault
+    env:
+      - CGO_ENABLED=0
+    id: linux
+    main: ./cmd/baton-alienvault
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+dockers:
+  - use: buildx
+    goos: linux
+    goarch: amd64
+    image_templates:
+      - "ghcr.io/conductorone/baton-alienvault:{{ .Version }}-amd64"
+      - "ghcr.io/conductorone/baton-alienvault:latest-amd64"
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title=baton-alienvault"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source=https://github.com/conductorone/baton-alienvault"
+  - use: buildx
+    goos: linux
+    goarch: arm64
+    image_templates:
+      - "ghcr.io/conductorone/baton-alienvault:{{ .Version }}-arm64"
+      - "ghcr.io/conductorone/baton-alienvault:latest-arm64"
+    build_flag_templates:
+      - "--platform=linux/arm64/v8"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title=baton-alienvault"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source=https://github.com/conductorone/baton-alienvault"
+docker_manifests:
+  - name_template: ghcr.io/conductorone/baton-alienvault:{{ .Version }}
+    image_templates:
+      - ghcr.io/conductorone/baton-alienvault:{{ .Version }}-amd64
+      - ghcr.io/conductorone/baton-alienvault:{{ .Version }}-arm64
+  - name_template: ghcr.io/conductorone/baton-alienvault:latest
+    image_templates:
+      - ghcr.io/conductorone/baton-alienvault:latest-amd64
+      - ghcr.io/conductorone/baton-alienvault:latest-arm64
+checksum:
+  disable: true
+release:
+  disable: true
+changelog:
+  skip: true
